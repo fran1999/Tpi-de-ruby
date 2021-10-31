@@ -14,7 +14,9 @@ module Polycon
 
         def call(name:, **)
           warn "TODO: Implementar creación de un o una profesional con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-          puts Professional.new.create(name)
+
+          profesional= Polycon::Professional.new(name)
+          puts profesional.create()
         end
       end
 
@@ -59,7 +61,7 @@ module Polycon
 
         def call(old_name:, new_name:, **)
           warn "TODO: Implementar renombrado de profesionales con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-          puts message= Professional.new.rename(old_name, new_name)
+          puts Professional.new.rename(old_name, new_name)
  
         end
       end

@@ -3,8 +3,12 @@ module Polycon
 
         attr_accessor :name 
 
+        def initialize(name="")
+            @name=name
+        end
 
-        def create(name)
+
+        def create()
             if ! Dir.exist?(Dir.home + "/.polycon/"+ name)
                 Dir.mkdir(File.join(Dir.home,"/.polycon/" + name), 0700)
                 message="el profesional #{name} fue agregado con exito"
