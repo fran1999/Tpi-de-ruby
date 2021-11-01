@@ -7,7 +7,10 @@ module Polycon
             @name=name
         end
 
-
+        def exist?(name) 
+            Dir.exist?(("#{Dir.home}/.polycon/"+"#{name}"))
+        end
+        
         def create()
             if ! Dir.exist?(Dir.home + "/.polycon/"+ name)
                 Dir.mkdir(File.join(Dir.home,"/.polycon/" + name), 0700)

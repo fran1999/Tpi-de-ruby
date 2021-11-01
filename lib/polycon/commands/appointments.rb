@@ -16,7 +16,23 @@ module Polycon
         ]
 
         def call(date:, professional:, name:, surname:, phone:, notes: nil)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
           warn "TODO: Implementar creación de un turno con fecha '#{date}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          
+          if not validate_date(date)
+            puts "la fecha esta mal escrita"
+          else
+            newAppointment = Polycon::Appointments.new(date, professional, name, surname, phone, notes)
+            puts newAppointment.create(professional, date)
+          end
+
         end
       end
 
