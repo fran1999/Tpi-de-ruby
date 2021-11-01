@@ -43,7 +43,24 @@ module Polycon
             turn=Dir.chdir(Dir.home + "/.polycon/#{profesional}")
             professional = Dir.glob('*').select {|f| File.file? f}
             professional.each {|pro| p pro}
-        end 
+        end
+
+        def read(route)
+            File.open(route,'r').each do |line| puts line end 
+        end
+
+        def show_turn(professional, date)
+            if not Professional.new.exist?(professional) #reviso que el profesional no exista
+                message = "ERROR: No se encontró el profesional ingresado"
+            elsif not exist?(date,professional) #reviso que el turno para ese profesional no exista
+                message = "ERROR: No existe el turno para el profesional #{professional} el dia #{date}"
+            else
+                file = date.gsub(" ","_")
+                turn = "#{Dir.home}/.polycon/#{professional}/#{file}.paf"
+                return read(turn)
+
+            end
+        end
 
     end
 end

@@ -37,6 +37,14 @@ module Polycon
       end
 
       class Show < Dry::CLI::Command
+        require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
         desc 'Show details for an appointment'
 
         argument :date, required: true, desc: 'Full date for the appointment'
@@ -48,6 +56,20 @@ module Polycon
 
         def call(date:, professional:)
           warn "TODO: Implementar detalles de un turno con fecha '#{date}' y profesional '#{professional}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
+          if not validate_date(date)
+            puts "la fecha esta mal escrita"
+          else
+            Appointment.new.show_turn(professional, date)
+          end
+
         end
       end
 
