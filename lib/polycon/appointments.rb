@@ -1,8 +1,8 @@
 module Polycon
-    class Appointments
+    class Appointment
 
         attr_accessor :date, :prof, :name , :surname, :phone, :notes
-        def initialize(date, prof, name, surname, phone, notes=nil)
+        def initialize(date="", prof="", name="", surname="", phone="", notes=nil)
             @date=date
             @prof=prof
             @name=name
@@ -15,8 +15,8 @@ module Polycon
             File.exist?"#{Dir.home}/.polycon/#{professional}/#{date}.paf"
         end
 
-        def create_file(turno)
-            File.open( turno, "w") do |file|
+        def create_file(turn)
+            File.open( turn, "w") do |file|
                 file.write( "#{@surname} \n")
                 file.write( "#{@name} \n")
                 file.write( "#{@phone} \n")
@@ -32,12 +32,18 @@ module Polycon
                 message = "ERROR: Ya existe el turno para el profesional #{professional} el dia #{date}"
             else
                 name_file=date.gsub(" ","_")
-                turno="#{Dir.home}/.polycon/#{professional}/#{name_file}.paf"
-                create_file(turno)
+                turn="#{Dir.home}/.polycon/#{professional}/#{name_file}.paf"
+                create_file(turn)
                 message = "se creo el turno exitosamente"
             end
             return message
         end
+
+        def list_turn(profesional)
+            turn=Dir.chdir(Dir.home + "/.polycon/#{profesional}")
+            professional = Dir.glob('*').select {|f| File.file? f}
+            professional.each {|pro| p pro}
+        end 
 
     end
 end
