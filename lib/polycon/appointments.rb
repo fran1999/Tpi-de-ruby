@@ -40,9 +40,13 @@ module Polycon
         end
 
         def list_turn(profesional)
-            turn=Dir.chdir(Dir.home + "/.polycon/#{profesional}")
-            professional = Dir.glob('*').select {|f| File.file? f}
-            professional.each {|pro| p pro}
+            if Dir.children("#{Dir.home}/.polycon/#{profesional}").empty?
+                warn "El profesional #{profesional} no tiene turnos "
+            else
+                turn=Dir.chdir(Dir.home + "/.polycon/#{profesional}")
+                professional = Dir.glob('*').select {|f| File.file? f}
+                professional.each {|pro| p pro}
+            end
         end
 
         def read(route)
@@ -60,6 +64,70 @@ module Polycon
                 return read(turn)
 
             end
+        end
+        def cancel(professional, date)
+            if not Professional.new.exist?(professional) 
+                message = "ERROR: El profesional \"#{professional}\" no se encuentra registrado en el sistema"
+            elsif not exist?(date,professional)
+                message = "ERROR: El profesional \"#{professional}\" no posee una cita en la fecha #{date}"
+            else
+                File.delete( "#{Dir.home}/.polycon/#{professional}/#{date}.paf")
+                message = "se cancelo con exito"
+            end
+            return message
+        end
+
+        def cancel_all(professional)
+          if not Professional.new.exist?(professional)
+            message = "ERROR: El profesional no existe "
+
+          elsif Dir.children("#{Dir.home}/.polycon/#{professional}").empty?
+            message = "El profesional #{professional} no tiene turnos "
+
+          else
+            Dir.children("#{Dir.home}/.polycon/#{professional}").each {|file| File.delete("#{Dir.home}/.polycon/#{professional}/#{file}")}
+            message = "se cancelaron todos los tuenos del #{professional}"
+
+          end
+          return message
+        end
+        def rename(new_date,old_date,professional)
+          if not Professional.new.exist?(professional) #reviso si existe el profesional
+            message= "ERROR: El profesional #{professional} no existe en el sistema o no fue especificado"
+          elsif not exist?(old_date,professional) #reviso que si existe el turno para el profesional
+            message = "ERROR: El turno del dia #{old_date} del profesional #{professional} no existe en el sistema"
+          elsif exist?(new_date,professional) #reviso que el nuevo turno para ese profesional no exista
+            message = "ERROR: Ya existe el turno para el profesional #{professional} el dia #{new_date}"
+          else
+            File.rename("#{Dir.home}/.polycon/#{professional}/#{old_date}.paf","#{Dir.home}/.polycon/#{professional}/#{prof}/#{new_date}.paf")
+            message = "El turno se combio con exito"
+          end
+        end
+        def edit (professional, date, options)
+            if not Professional.new.exist?(professional) #verifico si el directorio existe
+                message = "ERROR: El profesional \"#{professional}\" no se encuentra registrado en el sistema"
+            elsif not exist?(date, professional) #verifico si la fecha existe
+                message = "ERROR: El profesional \"#{professional}\" no posee una cita en la fecha #{date}"
+            else
+                turn="#{Dir.home}/.polycon/#{professional}/#{date}.paf"  
+                appo = Appointment.new()
+                if options.has_key?(:surname)
+                    appo.surname=options[:surname]
+                end
+                if options.has_key?(:name)
+                    appo.name=options[:name]
+                end
+                if options.has_key?(:phone)
+                    appo.phone=options[:phone]
+                end
+                if options.has_key?(:notes)
+                    appo.notes=options[:notes]
+                end
+                appo.create_file(turn)
+                message= "Modificado con exito"
+            end
+            return message
+
         end
 
     end

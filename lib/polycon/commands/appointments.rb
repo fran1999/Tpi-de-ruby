@@ -29,7 +29,7 @@ module Polycon
           if not validate_date(date)
             puts "la fecha esta mal escrita"
           else
-            newAppointment = Polycon::Appointments.new(date, professional, name, surname, phone, notes)
+            newAppointment = Polycon::Appointment.new(date, professional, name, surname, phone, notes)
             puts newAppointment.create(professional, date)
           end
 
@@ -84,7 +84,20 @@ module Polycon
         ]
 
         def call(date:, professional:)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
           warn "TODO: Implementar borrado de un turno con fecha '#{date}' y profesional '#{professional}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          if not validate_date(date) #validate the date
+            puts "la fecha esta mal escrita"
+          else
+            puts Appointment.new.cancel(professional, date)
+          end
         end
       end
 
@@ -99,6 +112,8 @@ module Polycon
 
         def call(professional:)
           warn "TODO: Implementar borrado de todos los turnos de la o el profesional '#{professional}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          
+          puts Appointment.new.cancel_all(professional)
         end
       end
 
@@ -132,7 +147,20 @@ module Polycon
         ]
 
         def call(old_date:, new_date:, professional:)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
           warn "TODO: Implementar cambio de fecha de turno con fecha '#{old_date}' para que pase a ser '#{new_date}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          if not validate_date(new_date) #reviso si la fecha recibida es un formato valido
+            puts "la fecha esta mal escrita"
+          else #se puede intentar eliminar el turno
+            puts Appointment.new.rename(new_date,old_date,professional)
+          end
         end
       end
 
@@ -153,7 +181,21 @@ module Polycon
         ]
 
         def call(date:, professional:, **options)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
           warn "TODO: Implementar modificación de un turno de la o el profesional '#{professional}' con fecha '#{date}', para cambiarle la siguiente información: #{options}.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          if not validate_date(date) #validate the date in the case that enter an incorrect date fomat
+            warn "ERROR: la fechas ingresadas no es una fecha valida"
+
+          else
+            puts Appointment.new.edit(professional, date, options)
+          end
         end
       end
     end
