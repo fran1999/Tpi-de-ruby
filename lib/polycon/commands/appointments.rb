@@ -194,7 +194,35 @@ module Polycon
             warn "ERROR: la fechas ingresadas no es una fecha valida"
 
           else
+            puts options
             puts Appointment.new.edit(professional, date, options)
+          end
+        end
+      end
+      class ListDay < Dry::CLI::Command
+        desc 'Cancel an appointment'
+
+        argument :date, required: true, desc: 'Full date for the appointment'
+        option :professional, required: true, desc: 'Full name of the professional'
+
+        example [
+          '"2021-09-16 13:00" --professional="Alma Estevez" # Cancels the appointment with Alma Estevez on the specified date and time'
+        ]
+
+        def call(date:, professional:)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            rescue
+                false
+            else
+                true
+          end
+          
+          if not validate_date(date) #validate the date
+            puts "la fecha esta mal escrita"
+          else
+            puts Appointment.new.list_day(professional, date)
           end
         end
       end

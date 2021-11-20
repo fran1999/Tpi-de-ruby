@@ -51,6 +51,25 @@ module Polycon
                 message="El profesional #{name} no existe por lo tanto no puede ser borrado"
             end
         end
-
+        def list_day_professional(professional,date)
+            turn = []
+            Dir.children("Dir.home"+/.polycon/+"#{professional}").each { |appointment|
+                if ((appointment.split("_")[0] == date) || date.nil?)
+                    turn << Appointments.get_appointment(appointment.delete(".paf"),professional)
+                end
+                }
+            turn
+        end
+        def list_appointments(date)
+            #Muestra en pantalla todos los turnos del profesional, opcionalmente filtrados por fecha, si no tiene turnos lo informa en pantalla
+            turnos = []
+            Dir.children("#{Polycon::Utils.path}/#{name}").each { |appointment|
+                if ((appointment.split("_")[0] == date) || date.nil?)
+                    turnos << Appointments.get_appointment(appointment.delete(".paf"),@name)
+                    puts turnos
+                end
+                }
+            turnos
+        end
     end
 end

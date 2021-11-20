@@ -65,6 +65,7 @@ module Polycon
 
             end
         end
+
         def cancel(professional, date)
             if not Professional.new.exist?(professional) 
                 message = "ERROR: El profesional \"#{professional}\" no se encuentra registrado en el sistema"
@@ -91,6 +92,7 @@ module Polycon
           end
           return message
         end
+
         def rename(new_date,old_date,professional)
           if not Professional.new.exist?(professional) #reviso si existe el profesional
             message= "ERROR: El profesional #{professional} no existe en el sistema o no fue especificado"
@@ -103,25 +105,48 @@ module Polycon
             message = "El turno se combio con exito"
           end
         end
+
+        def oldTurn(turn)
+            File.open( turn, "r") do |file|
+                @surname = file.gets.chomp
+                @name = file.gets.chomp
+                @phone = file.gets.chomp
+                @notes = file.gets.chomp
+            end
+        end
+
         def edit (professional, date, options)
+            puts options
             if not Professional.new.exist?(professional) #verifico si el directorio existe
                 message = "ERROR: El profesional \"#{professional}\" no se encuentra registrado en el sistema"
             elsif not exist?(date, professional) #verifico si la fecha existe
                 message = "ERROR: El profesional \"#{professional}\" no posee una cita en la fecha #{date}"
             else
+
                 turn="#{Dir.home}/.polycon/#{professional}/#{date}.paf"  
+                p (turn)
+                self.oldTurn(turn)
                 appo = Appointment.new()
                 if options.has_key?(:surname)
-                    appo.surname=options[:surname]
+                    appo.surname = options[:surname]
+                else
+                    puts @surname
+                    appo.surname = @surname
                 end
                 if options.has_key?(:name)
-                    appo.name=options[:name]
+                    appo.name = options[:name]
+                else
+                    appo.name = @name
                 end
                 if options.has_key?(:phone)
                     appo.phone=options[:phone]
+                else
+                    appo.phone = @phone
                 end
                 if options.has_key?(:notes)
-                    appo.notes=options[:notes]
+                    appo.notes = options[:notes]
+                else
+                    appo.notes = @notes
                 end
                 appo.create_file(turn)
                 message= "Modificado con exito"
@@ -130,5 +155,31 @@ module Polycon
 
         end
 
+        def get_appointment(date, professional)
+            name=File.open("#{Dir.home}/.polycon/#{professional}/#{date}.paf","r").first 
+            new(date, professional,name)
+        end 
+        def list_day(professional, date)
+            if professional #caso donde recibo un profesional
+                Professionals.new.list_day_professional(professional,date)#genero un arreglo con los turnos del profesional
+            else 
+                Professionals.list.inject([]) do |turnos,prof| #recorro todos los profesionales
+                    pr = Professionals.new(prof)
+                    turnos.concat(pr.list_appointments(date)) #guardo los turnos del profesional en un arreglo
+                end
+            end
+        end
     end
+    """ef self.list_all(date,professional)
+                #metodo que genera un arreglo con todos los turnos del sistema en una fecha especifica, opcionalmente filtrados por un profesional, sera un arreglo vacio si no hay turnos
+                if professional #caso donde recibo un profesional
+                    prof = Professionals.new(professional)
+                    prof.list_appointments(date) #genero un arreglo con los turnos del profesional
+                else 
+                    Professionals.list_professionals.inject([]) do |turnos,prof| #recorro todos los profesionales
+                        pr = Professionals.new(prof)
+                        turnos.concat(pr.list_appointments(date)) #guardo los turnos del profesional en un arreglo
+                    end
+                end
+            end"""
 end
