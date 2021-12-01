@@ -209,10 +209,10 @@ module Polycon
           '"2021-09-16 13:00" --professional="Alma Estevez" # Cancels the appointment with Alma Estevez on the specified date and time'
         ]
 
-        def call(date:, professional:)
+        def call(date:, professional:nil)
           require 'date'
           def validate_date(date)
-            DateTime.strptime(date,"%Y-%m-%d_%H-%M")
+            DateTime.strptime(date,"%Y-%m-%d")
             rescue
                 false
             else
@@ -222,7 +222,10 @@ module Polycon
           if not validate_date(date) #validate the date
             puts "la fecha esta mal escrita"
           else
-            puts Appointment.new.list_day(professional, date)
+            puts "#{Dir.home}/.polycon/"
+            a = Appointment.new.list_day(date, professional)
+            Pdf.create_pdf(professional,{date => a},date)
+
           end
         end
       end

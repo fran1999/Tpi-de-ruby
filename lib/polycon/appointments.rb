@@ -124,7 +124,6 @@ module Polycon
             else
 
                 turn="#{Dir.home}/.polycon/#{professional}/#{date}.paf"  
-                p (turn)
                 self.oldTurn(turn)
                 appo = Appointment.new()
                 if options.has_key?(:surname)
@@ -156,30 +155,24 @@ module Polycon
         end
 
         def get_appointment(date, professional)
+            p "entro"
             name=File.open("#{Dir.home}/.polycon/#{professional}/#{date}.paf","r").first 
-            new(date, professional,name)
+            apo=Appointment.new(date, professional,name)
         end 
-        def list_day(professional, date)
-            if professional #caso donde recibo un profesional
-                Professionals.new.list_day_professional(professional,date)#genero un arreglo con los turnos del profesional
-            else 
-                Professionals.list.inject([]) do |turnos,prof| #recorro todos los profesionales
-                    pr = Professionals.new(prof)
-                    turnos.concat(pr.list_appointments(date)) #guardo los turnos del profesional en un arreglo
-                end
+
+        def list_day(date,profesional)
+            "este metodo devuelve instacias appointment que tengan turnos"
+            turnos=[]
+            Professional.new.list.each do |prof| #recorro todos los profesionales
+                pro = Professional.new(prof)
+                turnos.concat(pro.list_appointments(date)) #guardo los turnos del profesional en un arreglo
             end
+
+            return turnos
+        end
+        def schedule_format
+            #metodo para retornar una representacion del turno , esta representacion posee el nombre y apellido del paciente y el profesional
+            "Prof. #{prof} - #{surname} #{name}"
         end
     end
-    """ef self.list_all(date,professional)
-                #metodo que genera un arreglo con todos los turnos del sistema en una fecha especifica, opcionalmente filtrados por un profesional, sera un arreglo vacio si no hay turnos
-                if professional #caso donde recibo un profesional
-                    prof = Professionals.new(professional)
-                    prof.list_appointments(date) #genero un arreglo con los turnos del profesional
-                else 
-                    Professionals.list_professionals.inject([]) do |turnos,prof| #recorro todos los profesionales
-                        pr = Professionals.new(prof)
-                        turnos.concat(pr.list_appointments(date)) #guardo los turnos del profesional en un arreglo
-                    end
-                end
-            end"""
 end

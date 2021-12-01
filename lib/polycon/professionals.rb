@@ -63,13 +63,17 @@ module Polycon
         def list_appointments(date)
             #Muestra en pantalla todos los turnos del profesional, opcionalmente filtrados por fecha, si no tiene turnos lo informa en pantalla
             turnos = []
-            Dir.children("#{Polycon::Utils.path}/#{name}").each { |appointment|
+            Dir.children(Dir.home+"/.polycon/"+"#{@name}").each { |appointment|
+                
+
                 if ((appointment.split("_")[0] == date) || date.nil?)
-                    turnos << Appointments.get_appointment(appointment.delete(".paf"),@name)
-                    puts turnos
+                    
+                    nuevo = Appointment.new.get_appointment(appointment.delete(".paf"),@name) 
+                    turnos.push(nuevo)
                 end
                 }
             turnos
+
         end
     end
 end
