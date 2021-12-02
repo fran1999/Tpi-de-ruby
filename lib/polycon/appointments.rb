@@ -181,5 +181,14 @@ module Polycon
             "Profesional: #{prof} ,
             Paciente: #{surname} #{name}"
         end
+        def list_all_week(semana,professional)
+            #metodo que retorna un hash con un arreglo de turnos de cada dia de la semana recibida por parametro, opcionalmente filtrados por profesional
+            turnos = {}
+            semana.each { |date|
+                turnos[date] = list_day(date,professional)
+                turnos
+            }
+            turnos
+        end
     end
 end

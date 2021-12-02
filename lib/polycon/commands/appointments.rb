@@ -229,6 +229,43 @@ module Polycon
           end
         end
       end
+      class ListWeek < Dry::CLI::Command
+        desc 'Cancel an appointment'
+
+        argument :date, required: true, desc: 'Full date for the appointment'
+        option :professional, required: true, desc: 'Full name of the professional'
+
+        example [
+          '"2021-09-16 13:00" --professional="Alma Estevez" # Cancels the appointment with Alma Estevez on the specified date and time'
+        ]
+
+        def call(date:, professional:nil)
+          require 'date'
+          def validate_date(date)
+            DateTime.strptime(date,"%Y-%m-%d")
+            rescue
+                false
+            else
+                true
+          end
+          def semana(date)
+            #devuelve un arreglo con los 7 dias de la semana de la fecha recibida por paremtro, cada elemento esta en formato string
+            date_object = Date.strptime(date,"%Y-%m-%d")
+            date_object = date_object - (date_object.wday - 1)%7 #obtengo el primer dia de la semana
+            (date_object..date_object+6).map{ |date| date.to_s.strip}
+          end
+          
+          if not validate_date(date) #validate the date
+            puts "la fecha esta mal escrita"
+          else
+            puts "#{Dir.home}/.polycon/"
+            p semana(date)
+            a = Appointment.new.list_all_week(semana(date), professional)
+            Pdf.create_pdf(professional,a, *semana(date))
+
+          end
+        end
+      end
     end
   end
 end
