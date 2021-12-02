@@ -163,16 +163,23 @@ module Polycon
         def list_day(date,profesional)
             "este metodo devuelve instacias appointment que tengan turnos"
             turnos=[]
-            Professional.new.list.each do |prof| #recorro todos los profesionales
-                pro = Professional.new(prof)
-                turnos.concat(pro.list_appointments(date)) #guardo los turnos del profesional en un arreglo
+            if profesional
+                prof = Professional.new(profesional)
+                turnos=prof.list_appointments(date)
+            else
+                
+                Professional.new.list.each do |prof| #recorro todos los profesionales
+                    pro = Professional.new(prof)
+                    turnos.concat(pro.list_appointments(date)) #guardo los turnos del profesional en un arreglo
+                end
             end
 
             return turnos
         end
-        def schedule_format
+        def schedule_format()
             #metodo para retornar una representacion del turno , esta representacion posee el nombre y apellido del paciente y el profesional
-            "Prof. #{prof} - #{surname} #{name}"
+            "Profesional: #{prof} ,
+            Paciente: #{surname} #{name}"
         end
     end
 end

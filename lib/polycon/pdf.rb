@@ -10,7 +10,7 @@ module Polycon
             Prawn::Document.generate(self.nombrePdf(date,professional)) do |pdf|
                 data = [["Hora/Dia", *date]] #header, tiene los o el dia a mostrar
                 data += self.generate_table(pdf,appointments) #cargo la informacion del resto de filas de la tabla
-                pdf.table(data, :header => true ,:row_colors => ["F0F0F0", "FFFFCC"], :cell_style => { :size => 9})
+                pdf.table(data, :header => true ,:row_colors => ["F0F0F0", "FFFFCC"], :cell_style => { :size => 11})
             end
         end
 
