@@ -2,10 +2,6 @@ module Polycon
     module Pdf
         require 'prawn'
 
-        
-
-        dir = Dir.home+"/.polycon/"
-
         def self.create_pdf(professional,appointments,*date)
             Prawn::Document.generate(self.nombrePdf(date,professional)) do |pdf|
                 data = [["Hora/Dia", *date]] #header, tiene los o el dia a mostrar

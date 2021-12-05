@@ -177,12 +177,12 @@ module Polycon
             return turnos
         end
         def schedule_format()
-            #metodo para retornar una representacion del turno , esta representacion posee el nombre y apellido del paciente y el profesional
+            #este metodo retorna el string que se va a mostrar en la grilla
             "Profesional: #{prof} ,
             Paciente: #{surname} #{name}"
         end
         def list_all_week(semana,professional)
-            #metodo que retorna un hash con un arreglo de turnos de cada dia de la semana recibida por parametro, opcionalmente filtrados por profesional
+            #este metodo retorna un diccionario con una lista de cada dia de la semana que puede estar filtrado por un profesional
             turnos = {}
             semana.each { |date|
                 turnos[date] = list_day(date,professional)
