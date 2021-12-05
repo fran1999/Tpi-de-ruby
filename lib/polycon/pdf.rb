@@ -4,19 +4,18 @@ module Polycon
 
         def self.create_pdf(professional,appointments,*date)
             Prawn::Document.generate(self.nombrePdf(date,professional)) do |pdf|
-                data = [["Hora/Dia", *date]] #header, tiene los o el dia a mostrar
-                data += self.generate_table(pdf,appointments) #cargo la informacion del resto de filas de la tabla
-                pdf.table(data, :header => true ,:row_colors => ["F0F0F0", "FFFFCC"], :cell_style => { :size => 11})
+                data = [["Hora/Dia", *date]] #se guarda el o los dias a mostrar
+                data += self.generate_table(pdf,appointments) #se carga la informacion del resto de filas de la tabla
+                pdf.table(data, :header => true ,:row_colors => ["F0F0F0", "FFFFCC"], :cell_style => { :size => 11})# se crea la tabla con su color
             end
         end
 
         def self.nombrePdf(date,professional)
+            #en este metodo crea el archivo con el nombre y la rura donde se guarda en este caso se guarda en horarios
             professional ||= "all"
             if ! Dir.exist?(Dir.home << "/.horarios") then
                 Dir.mkdir(Dir.home << "/.horarios")
-            else
-                dir = Dir.home << "/.horarios"
-            end
+            dir = Dir.home << "/.horarios"
             p dir 
             if date.length > 1 then
                 "#{dir}/turnos-semanal-_#{date.first}-#{professional}.pdf"
@@ -26,7 +25,7 @@ module Polycon
         end
 
         def self.generate_table(pdf, appointments)
-            #metodo que genera un arreglo con el resto de filas de la tabla con la informacion de los turnos de cada bloque horario de los dias a procesar
+            #en este metodo que genera una lista con las filas de la tabla con la informacion de los turnos de cada bloque horario 
             schedule = ["9-00","9-30","10-00","10-30","11-00","11-30","12-00","12-30","13-00","13-30","14-00","14-30","15-00","15-30","16-00","16-30","17-00","17-30","18-00","18-30","19-00","19-30"]
             schedule.inject([]) do |data, hour| #por cada bloque de tiempo
                 data+= [
@@ -35,17 +34,17 @@ module Polycon
             end
         end
         def self.make_row(pdf,appointments,hour)
-            #Metodo que genera una fila con la informacion de los turnos de los dias a procesar en un bloque horario
-            appointments.keys.inject(["#{hour}"]) do |row,key| #genero una celda por cada dia a procesar
-                if appointments[key].select { |appointment| appointment.date == "#{key}_#{hour}" }.empty? #Si no hay turnos para ese dia y hora hago una celda vacia
+            #en este metodo se genera una fila con la informacion de los turnos 
+            appointments.keys.inject(["#{hour}"]) do |row,key| # se genera una celda por cada dia 
+                if appointments[key].select { |appointment| appointment.date == "#{key}_#{hour}" }.empty? #se genera una celda vacia dia y hora si no hay un turno
                     row.push("")
-                else #Caso contrario genero una subtabla con la info de cada turno a procesar
-                    row.push(self.make_subtable(pdf,appointments,key,hour)) #genero una subtabla con la informacion de cada turno de ese horario
+                else #se genera una celda con la info de cada turno
+                    row.push(self.make_subtable(pdf,appointments,key,hour)) #se genera una celda con informacion de cada turno 
                 end
             end
         end
         def self.make_subtable(pdf,appointments,key,hour)
-            #metodo que genera una subtabla con la informacion de cada turno en ese dia y bloque horario
+            #en este metodo que genera una celda con la informacion de cada turno en ese dia y bloque horario
             pdf.make_table((appointments[key].select { |appointment| appointment.date == "#{key}_#{hour}" })
                     .map{ |appointment| [appointment.schedule_format]}, :cell_style => {:size => 9 , :width => 70})
         end
