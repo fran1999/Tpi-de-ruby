@@ -16,10 +16,16 @@ module Polycon
 
         def self.nombrePdf(date,professional)
             professional ||= "all"
-            if date.length > 1 then
-                "#{Dir.home+"/.polycon/"}/turnos-semanal-_#{date.first}-#{professional}.pdf"
+            if ! Dir.exist?(Dir.home << "/.horarios") then
+                Dir.mkdir(Dir.home << "/.horarios")
             else
-                "#{Dir.home+"/.polycon/"}/turnos_#{date.first}-#{professional}.pdf"
+                dir = Dir.home << "/.horarios"
+            end
+            p dir 
+            if date.length > 1 then
+                "#{dir}/turnos-semanal-_#{date.first}-#{professional}.pdf"
+            else
+                "#{dir}/turnos_#{date.first}-#{professional}.pdf"
             end
         end
 
