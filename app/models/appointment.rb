@@ -2,20 +2,26 @@ class Appointment < ApplicationRecord
   belongs_to :professional
   validates :patient_name, :patient_surname, :date, :phone, presence: true
   validates :phone, numericality: { only_integer: true }
-  validate :hour, :hour_availability
+  validate :hour_valid, :hour_without_reservation
 
-  def hour
-    if date.present? #Si ingrese una fecha
-      errors.add(:date, "minutes of the appointment must be 0 or 30") unless [0,30].include? date.min
-      errors.add(:date, "hour must be between 9 and 19") unless (9..19).include? date.hour
+  def hour_valid
+    if not date.blank?
+      if not [0,30].include? date.min
+        errors.add(:date, "Los minutos deben en punto o y media ")
+      end
+      if not (9..19).include? date.hour
+        errors.add(:date, "Los horarios diponible son entre las 9 y las 19 horas") 
+      end
     end
   end
 
-  #valida que el horario del turno no coincida con otro turno ya existente para ese profesional
-  def hour_availability
-    if date.present?
-      existing_appointment = Appointment.where("date = ? and professional_id = ?", date.to_datetime, professional_id).first
-      errors.add(:date, " : The professional already has an appointment on that date and hour") unless existing_appointment.nil?
+  
+  def hour_without_reservation
+    if not date.blank?
+      appointment = Appointment.where("date = ? and professional_id = ?", date.to_datetime, professional_id).first
+      if appointment
+        errors.add(:date, "EL horario con ese professional ya esta ocupado") unless id == appointment.id
+      end
     end
   end
 end
