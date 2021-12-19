@@ -14,9 +14,10 @@ class AppointmentsTest < ApplicationSystemTestCase
     visit appointments_url
     click_on "New Appointment"
 
-    fill_in "Last name patient", with: @appointment.last_name_patient
-    fill_in "Name patient", with: @appointment.name_patient
+    fill_in "Date", with: @appointment.date
     fill_in "Notes", with: @appointment.notes
+    fill_in "Patient name", with: @appointment.patient_name
+    fill_in "Patient surname", with: @appointment.patient_surname
     fill_in "Phone", with: @appointment.phone
     click_on "Create Appointment"
 
@@ -28,9 +29,10 @@ class AppointmentsTest < ApplicationSystemTestCase
     visit appointments_url
     click_on "Edit", match: :first
 
-    fill_in "Last name patient", with: @appointment.last_name_patient
-    fill_in "Name patient", with: @appointment.name_patient
+    fill_in "Date", with: @appointment.date
     fill_in "Notes", with: @appointment.notes
+    fill_in "Patient name", with: @appointment.patient_name
+    fill_in "Patient surname", with: @appointment.patient_surname
     fill_in "Phone", with: @appointment.phone
     click_on "Update Appointment"
 
