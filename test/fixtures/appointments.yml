@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  date: 
   name_patient: MyString
-  surname_patient: MyString
-  [: MyString
+  last_name_patient: MyString
+  phone: MyString
+  notes: MyString
 
 two:
-  date: 
   name_patient: MyString
-  surname_patient: MyString
-  [: MyString
+  last_name_patient: MyString
+  phone: MyString
+  notes: MyString
