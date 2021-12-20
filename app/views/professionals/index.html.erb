@@ -16,14 +16,23 @@
         <td><%= professional.name %></td>
         <td><%= link_to 'Appointments', professional_appointments_path(professional) %></td>
         <td><%= link_to 'Show', professional %></td>
-        <td><%= link_to 'Edit', edit_professional_path(professional) %></td>
-        <td><%= link_to 'Destroy', professional, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <% if loggedUserHasRole?("administracion") %>
+          <td><%= link_to 'Edit', edit_professional_path(professional) %></td>
+          <td><%= link_to 'Destroy', professional, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+  
+  <%= link_to 'Export All Appointments', export_all_path%> |
+  <%= link_to 'Back to home', root_path%> |
 
-<%= link_to 'New Professional', new_professional_path %>
-<%= link_to 'Export All Appointments', export_all_path, class: "button is-danger" ,style: "float: left; margin-left:10px; margin-top:30px"%>
+  <% if loggedUserHasRole?("administracion") %>
+    <%= link_to 'New Professional', new_professional_path %> |
+  <% end %>
+
+  

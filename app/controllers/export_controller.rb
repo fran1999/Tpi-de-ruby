@@ -1,5 +1,5 @@
 class ExportController < ApplicationController
-  
+  before_action :check_auth
   before_action :set_professional, only:[:export_professional]
 
   def export_all
@@ -78,6 +78,13 @@ class ExportController < ApplicationController
   private
     def set_professional
       @professional = Professional.find(params[:professional_id])
+    end
+
+    def check_auth
+      if session[:user_id].nil?
+        flash[:alert] = "You must be logged in to enter this page!!"
+        redirect_to login_path
+      end
     end
 
 end

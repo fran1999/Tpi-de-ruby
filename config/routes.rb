@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  #Home de la app
+  root to: 'home#index' 
+
+  #rutas relacionadas a sesiones
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
+
+  #rutas de usuario
+  resources :users
 
   resources :users
   get 'export_all', to: "export#export_all"
