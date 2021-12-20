@@ -1,0 +1,4 @@
+<h1>Exportar los turnos de <%= @professional.name %></h1>
+
+<%= render 'form', {url: professional_export_appointments_path(@professional)} %>
+<%= link_to 'Back', professional_appointments_path(@professional) %>
