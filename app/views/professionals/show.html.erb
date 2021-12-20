@@ -7,6 +7,6 @@
 
 <%= link_to 'Appointments', professional_appointments_path(@professional) %> |
 <% if loggedUserHasRole?("administracion") %>  
-  <%= link_to 'Edit', edit_professional_path(@professional) %> |
+  <%= link_to 'Editar', edit_professional_path(@professional) %> |
 <% end %>
-<%= link_to 'Back', professionals_path %>
+<%= link_to 'Volver', professionals_path %>

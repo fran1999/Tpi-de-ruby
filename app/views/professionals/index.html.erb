@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Professionals</h1>
+<h1>Lista de profesionales</h1>
 
 <table>
   <thead>
@@ -14,7 +14,7 @@
     <% @professionals.each do |professional| %>
       <tr>
         <td><%= professional.name %></td>
-        <td><%= link_to 'Appointments', professional_appointments_path(professional) %></td>
+        <td><%= link_to 'Turnos', professional_appointments_path(professional) %></td>
         <td><%= link_to 'Show', professional %></td>
 
         <% if loggedUserHasRole?("administracion") %>
@@ -28,11 +28,11 @@
 
 <br>
   
-  <%= link_to 'Export All Appointments', export_all_path%> |
-  <%= link_to 'Back to home', root_path%> |
+  <%= link_to 'Exportar todos los turnos', export_all_path%> |
+  <%= link_to 'volver al home', root_path%> |
 
   <% if loggedUserHasRole?("administracion") %>
-    <%= link_to 'New Professional', new_professional_path %> |
+    <%= link_to 'crear profesional', new_professional_path %> |
   <% end %>
 
   

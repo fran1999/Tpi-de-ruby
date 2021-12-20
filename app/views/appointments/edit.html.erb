@@ -1,6 +1,6 @@
-<h1>Editing Appointment</h1>
+<h1>Editar turno</h1>
 
 <%= render 'form', appointment: @appointment , professional: @professional %>
 
-<%= link_to 'Show', [@professional, @appointment] %> |
-<%= link_to 'Back', professional_appointments_path(@professional) %>
+<%= link_to 'Ver', [@professional, @appointment] %> |
+<%= link_to 'atras', professional_appointments_path(@professional) %>
