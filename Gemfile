@@ -19,6 +19,8 @@ gem 'turbolinks', '~> 5'
 gem 'prawn', '~> 2.4.0'
 
 gem 'prawn-table'
+
+gem 'bcrypt', '~> 3.1.7'
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

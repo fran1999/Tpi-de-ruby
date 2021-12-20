@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :users
   get 'export_all', to: "export#export_all"
   resources :professionals do
     resources :appointments
