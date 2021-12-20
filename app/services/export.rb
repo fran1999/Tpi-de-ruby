@@ -26,7 +26,7 @@ module Export
     def self.fila(pdf,turnos,hora)
         #esta funcion genera una fila con la informacion de cada dia
         turnos.keys.inject(["#{hora}"]) do |row,key| 
-            if turnos[key].select { |appointment| appointment.date.strftime("%Y-%m-%d_%H:%M") == "#{key}_#{hora}" }.empty? #
+            if turnos[key].select { |appointment| appointment.date.strftime("%Y-%m-%d_%H:%M") == "#{key}_#{hora}" }.empty? 
                 row.push("")    #genero celda vacia 
             else 
                 row.push(self.make_subtable(pdf,turnos,key,hora)) #genero una celda con la informacion del horario

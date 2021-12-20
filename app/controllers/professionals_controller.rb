@@ -65,7 +65,7 @@ class ProfessionalsController < ApplicationController
     end
     #Chequeo de que sea admin para borrar y editar
     def check_role
-      if current_user.role.name != "administracion"
+      if current_user.rol.name != "administracion"
         flash[:alert] = "You don't have permission to access to that URL!! You have been redirected to the home page"
         redirect_to root_path
       end

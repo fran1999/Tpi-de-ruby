@@ -69,7 +69,7 @@ class AppointmentsController < ApplicationController
     end
     #Si su rol es consulta, no esta habilitado para editar o borrar turnos
     def check_role
-      if current_user.role.name == "consulta"
+      if current_user.rol.name == "consulta"
         flash[:alert] = "You don't have permission to access to that URL!! You have been redirected to the home page"
         redirect_to root_path
       end
